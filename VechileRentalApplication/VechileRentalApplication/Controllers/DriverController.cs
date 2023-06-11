@@ -57,7 +57,7 @@ namespace VechileRentalApplication.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var driver = _context.Drivers.FirstOrDefault(d => d.Id == updatedDriver.id);
+            var driver = _context.Drivers.FirstOrDefault(d => d.Id == updatedDriver.Id);
             if (driver == null)
                 return NotFound();
 
