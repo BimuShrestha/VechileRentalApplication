@@ -27,6 +27,8 @@ namespace VechileRentalApplication.Controllers
         }
 
         //Implementation of Linear Search
+        [HttpGet]
+        [Route("api/vehicles/Search")]
         public List<Vehicle> LinearSearch(string searchQuery)
         {
             List<Vehicle> results = new List<Vehicle>();
