@@ -22,7 +22,7 @@ export class Logout extends Component {
         const action = this.props.action;
         switch (action) {
             case LogoutActions.Logout:
-                if (!!window.history.state.state.local) {
+                if (true) {
                     this.logout(this.getReturnUrl());
                 } else {
                     // This prevents regular links to <app>/authentication/logout from triggering a logout
@@ -57,7 +57,9 @@ export class Logout extends Component {
                 case LogoutActions.LogoutCallback:
                     return (<div>Processing logout callback</div>);
                 case LogoutActions.LoggedOut:
+                    window.location.href=window.location.origin
                     return (<div>{message}</div>);
+
                 default:
                     throw new Error(`Invalid action '${action}'`);
             }

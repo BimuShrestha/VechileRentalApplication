@@ -1,0 +1,32 @@
+/* HomePage.css */
+
+.navbar {
+    padding: 0.1rem 1rem;
+}
+
+.custom-search {
+    padding: 0.5rem;
+    display: flex;
+}
+
+.custom-search-input {
+    margin-right: 10px;
+}
+
+.dropdown-menu {
+    padding: 3rem;
+}
+
+.dropdown-item {
+    margin-bottom: 0.5rem;
+}
+
+.custom-carousel {
+    height: 80vh; /* 50% of the viewport height */
+    overflow: hidden;
+}
+
+.custom-carousel-img {
+    height: 100%;
+    object-fit: cover;
+}
