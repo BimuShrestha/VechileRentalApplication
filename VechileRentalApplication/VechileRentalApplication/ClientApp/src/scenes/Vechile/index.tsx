@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Table, Checkbox, List, Modal, Row, Col, Upload, Select } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import {
-  UploadOutlined
+  UploadOutlined,SearchOutlined
 } from '@ant-design/icons';
 import axios from 'axios';
 import { RcFile } from 'antd/es/upload/interface';
@@ -26,6 +26,36 @@ const brandOptions = ['Toyota', 'Ford', 'BMW'];
 
 
 const VehiclePage: React.FC = () => {
+    const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([
+      {
+        id: 1,
+        name: 'Vehicle 1',
+        detail: 'This is a detail of Vehicle 1',
+        vehicleType: 'Car',
+        brand: 'Toyota',
+        isFree: true,
+        imageData: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+      },
+      {
+        id: 2,
+        name: 'Vehicle 2',
+        detail: 'This is a detail of Vehicle 2',
+        vehicleType: 'Truck',
+        brand: 'Ford',
+        isFree: false,
+        imageData: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+      },
+      {
+        id: 3,
+        name: 'Vehicle 3',
+        detail: 'This is a detail of Vehicle 3',
+        vehicleType: 'Motorcycle',
+        brand: 'BMW',
+        isFree: true,
+        imageData: 'https://images.unsplash.com/photo-1517672651691-24622a91b550?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80',
+      },
+    ]);
+  const [searchText, setSearchText] = useState<string>('');
   const [{data,loading},makeRequest]=useAxios("/api/vehicles");
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
   const [{ loading:updateLoading  }, updatevehicle] = useAxios(
@@ -46,28 +76,28 @@ const VehiclePage: React.FC = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([
     {
       id: 1,
-      name: 'Vehicle 1',
+      brand: 'Vehicle 1',
       detail: 'This is a detail of Vehicle 1',
       vehicleType: 'Car',
-      brand: 'Toyota',
+      name: 'Toyota',
       isFree: true,
       imageData: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     },
     {
       id: 2,
-      name: 'Vehicle 2',
+      brand: 'Vehicle 2',
       detail: 'This is a detail of Vehicle 2',
       vehicleType: 'Truck',
-      brand: 'Ford',
+      name: 'Ford',
       isFree: false,
       imageData: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     },
     {
       id: 3,
-      name: 'Vehicle 3',
+      brand: 'Vehicle 3',
       detail: 'This is a detail of Vehicle 3',
       vehicleType: 'Motorcycle',
-      brand: 'BMW',
+      name: 'BMW',
       isFree: true,
       imageData: 'https://images.unsplash.com/photo-1517672651691-24622a91b550?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80',
     },
@@ -145,9 +175,21 @@ const VehiclePage: React.FC = () => {
   ];
 
 
+  const handleSearch = (value: string) => {
+    const filteredData = vehicles.filter(
+      (vehicle) =>
+        vehicle.name.toLowerCase().includes(value.toLowerCase()) ||
+        vehicle.detail.toLowerCase().includes(value.toLowerCase()) ||
+        vehicle.brand.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredVehicles(filteredData);
+    setSearchText(value);
+  };
+
+
   return (
     <div>
-      <Row>
+      <Row justify="space-between">
         <Col>
           <Button type="primary"
             onClick={() => {
@@ -156,7 +198,17 @@ const VehiclePage: React.FC = () => {
             }}>
             Add Vehicle
           </Button>
+         
 
+        </Col>
+        <Col>
+         <Input
+          placeholder="Search by name or detail"
+          value={searchText}
+          onChange={(e) => handleSearch(e.target.value)}
+          prefix={<SearchOutlined />}
+          allowClear
+        />
         </Col>
       </Row>
       <VehicleModal
@@ -169,7 +221,7 @@ const VehiclePage: React.FC = () => {
       />
 
       <VehicleList
-        vehicles={vehicles}
+        vehicles={filteredVehicles}
         onEditVehicle={editVehicle}
         loading={loading}
       />
