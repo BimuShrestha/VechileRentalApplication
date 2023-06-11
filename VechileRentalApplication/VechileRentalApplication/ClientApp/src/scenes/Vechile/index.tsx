@@ -78,20 +78,29 @@ const VehiclePage: React.FC = () => {
   const handleCreate = (values: any) => {
     debugger;
     console.log('Received values of form: ', values);
-    let postData = 
-    {
-      "id": 1,
-      "name": "Vehicle Name",
-      "details": "Vehicle Details",
-      "vehicleTypeId": 2,
-      "attachmentId": 3,
-      "fuelTypeId": 4
-    }
-    
+    const file = values.imageData.file.originFileObj;
 
-    updatevehicle({ data: postData });
-    // handle creating a new vehicle
-    setIsModalVisible(false);
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+     let base64= reader.result;
+      let postData = 
+      {
+        "id": 1,
+        "name": values.name,
+        "details": values.detail,
+        "vehicleTypeId": 1,
+        "Attachment": base64,
+      }
+      
+  
+      updatevehicle({ data: postData });
+      // handle creating a new vehicle
+      setIsModalVisible(false);
+    };
+
+    reader.readAsDataURL(file);
+   
   };
 
   const handleUpdate = (values: any) => {
