@@ -12,3 +12,13 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+.demo-logo-vertical{
+  margin: 0 auto;
+  padding: 10px;
+  color: white;
+  font-size: 19px;
+  font-weight: bold;
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+}

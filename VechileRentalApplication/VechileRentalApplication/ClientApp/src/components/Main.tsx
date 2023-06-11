@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Spin } from "antd";
 import AdminDashboard from "../scenes/AdminDashboard";
 import LandingPage from "../scenes/LandingPage";
+import StyledSpin from "./StyledSpin";
 
 const Main=()=>{
     const[isAuthenticated,setIsAuthenticated]=useState(false);
@@ -17,8 +18,10 @@ const Main=()=>{
             console.log(isAuthenticatedValue,userValue)
             setIsAuthenticated(isAuthenticatedValue)
             setUser(userValue);
-            setLoading(false)
+            setTimeout(()=>{
+                setLoading(false)
 
+            },2000)
         })()
     },[])
     const registerPath = `${ApplicationPaths.Register}`;
@@ -26,7 +29,7 @@ const Main=()=>{
     const profilePath = `${ApplicationPaths.Profile}`;
     const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
     if(loading){
-        return (<Spin/>)
+        return (<StyledSpin/>)
     }
       return (<>
       {isAuthenticated ? <Fragment>
@@ -36,7 +39,7 @@ const Main=()=>{
             <NavItem>
                 <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
             </NavItem> */}
-            <AdminDashboard/>
+            <AdminDashboard data={user}/>
         </Fragment>:<Fragment>
             {/* <NavItem>
                 <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
