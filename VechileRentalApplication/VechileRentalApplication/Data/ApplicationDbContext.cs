@@ -17,5 +17,14 @@ namespace VechileRentalApplication.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+        public DbSet <Customer> Customers { get; set; }
+        public DbSet <Vehicle> Vehicles { get; set; }
+        public DbSet <VehicleType> VehicleTypes { get; set; }
+        public DbSet <FuelType> FuelTypes { get; set; }
+        public DbSet <Attachment> Attachments { get; set; }
+        public DbSet <Reservation> Reservations { get; set; }
+        public DbSet <ReservationStatus> ReservationStatus { get; set; }
+        public DbSet <Driver> Drivers { get; set; }
+        public DbSet <BrandType> BrandTypes { get; set; }
     }
 }
