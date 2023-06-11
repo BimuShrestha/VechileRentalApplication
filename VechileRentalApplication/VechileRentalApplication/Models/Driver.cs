@@ -10,9 +10,8 @@ namespace VechileRentalApplication.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         [DisplayName("License")]
-        public int AttachmentId { get; set; }
+        public string Attachment { get; set; }
         public int VehicleTypeId { get; set; }
-        public virtual Attachment Attachment { get; set; }
         public virtual VehicleType VehicleType { get; set; }
     }
 }

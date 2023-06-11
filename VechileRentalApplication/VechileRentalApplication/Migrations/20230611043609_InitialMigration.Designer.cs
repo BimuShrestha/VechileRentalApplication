@@ -10,7 +10,7 @@ using VechileRentalApplication.Data;
 namespace VechileRentalApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230610100025_InitialMigration")]
+    [Migration("20230611043609_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -330,27 +330,6 @@ namespace VechileRentalApplication.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("VechileRentalApplication.Models.Attachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Blob")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContentType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Attachments");
-                });
-
             modelBuilder.Entity("VechileRentalApplication.Models.BrandType", b =>
                 {
                     b.Property<int>("Id")
@@ -378,8 +357,8 @@ namespace VechileRentalApplication.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AttachmentId")
-                        .HasColumnType("int");
+                    b.Property<string>("Attachment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -398,8 +377,6 @@ namespace VechileRentalApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttachmentId");
-
                     b.HasIndex("VehicleTypeId");
 
                     b.ToTable("Drivers");
@@ -417,7 +394,7 @@ namespace VechileRentalApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FuelType");
+                    b.ToTable("FuelTypes");
                 });
 
             modelBuilder.Entity("VechileRentalApplication.Models.Reservation", b =>
@@ -489,8 +466,8 @@ namespace VechileRentalApplication.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AttachmentId")
-                        .HasColumnType("int");
+                    b.Property<string>("Attachment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -517,9 +494,6 @@ namespace VechileRentalApplication.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttachmentId")
-                        .IsUnique();
 
                     b.HasIndex("FuelTypeId");
 
@@ -627,19 +601,11 @@ namespace VechileRentalApplication.Migrations
 
             modelBuilder.Entity("VechileRentalApplication.Models.Driver", b =>
                 {
-                    b.HasOne("VechileRentalApplication.Models.Attachment", "Attachment")
-                        .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("VechileRentalApplication.Models.VehicleType", "VehicleType")
                         .WithMany()
                         .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Attachment");
 
                     b.Navigation("VehicleType");
                 });
@@ -677,12 +643,6 @@ namespace VechileRentalApplication.Migrations
 
             modelBuilder.Entity("VechileRentalApplication.Models.Vehicle", b =>
                 {
-                    b.HasOne("VechileRentalApplication.Models.Attachment", "Attachment")
-                        .WithOne("Vehicle")
-                        .HasForeignKey("VechileRentalApplication.Models.Vehicle", "AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("VechileRentalApplication.Models.FuelType", "FuelType")
                         .WithMany()
                         .HasForeignKey("FuelTypeId")
@@ -693,16 +653,9 @@ namespace VechileRentalApplication.Migrations
                         .WithMany("Vehicles")
                         .HasForeignKey("VehicleTypeId");
 
-                    b.Navigation("Attachment");
-
                     b.Navigation("FuelType");
 
                     b.Navigation("VehicleType");
-                });
-
-            modelBuilder.Entity("VechileRentalApplication.Models.Attachment", b =>
-                {
-                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("VechileRentalApplication.Models.VehicleType", b =>

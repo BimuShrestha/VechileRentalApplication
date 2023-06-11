@@ -62,7 +62,7 @@ namespace VechileRentalApplication.Controllers
             vehicle.Name = updatedVehicle.Name;
             vehicle.Details = updatedVehicle.Details;
             vehicle.VehicleTypeId = updatedVehicle.VehicleTypeId;
-            vehicle.AttachmentId = updatedVehicle.AttachmentId;
+            vehicle.Attachment = updatedVehicle.Attachment;
             vehicle.FuelTypeId = updatedVehicle.FuelTypeId;
             _context.Vehicles.Update(vehicle);
             _context.SaveChanges();

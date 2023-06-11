@@ -6,10 +6,9 @@
         public string Name { get; set; }
         public string Details { get; set; }
         public int? VehicleTypeId { get; set; }
-        public int AttachmentId { get; set; }
+        public string Attachment { get; set; }
         public int FuelTypeId { get; set; }
         public virtual VehicleType VehicleType { get; set; }
-        public virtual Attachment Attachment { get; set; }
         public virtual FuelType FuelType { get; set; }
     }
 }

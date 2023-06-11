@@ -65,7 +65,7 @@ namespace VechileRentalApplication.Controllers
             driver.LastName = updatedDriver.LastName;
             driver.Email = updatedDriver.Email;
             driver.Phone = updatedDriver.Phone;
-            driver.AttachmentId = updatedDriver.AttachmentId;
+            driver.Attachment = updatedDriver.Attachment;
             driver.VehicleTypeId = updatedDriver.VehicleTypeId;
             _context.Drivers.Update(updatedDriver);
             _context.SaveChanges();
