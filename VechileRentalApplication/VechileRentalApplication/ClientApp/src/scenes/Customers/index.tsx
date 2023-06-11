@@ -67,32 +67,155 @@ const CustomerPage: React.FC = () => {
       title: 'First Name',
       dataIndex: 'firstName',
     //   ...getColumnSearchProps('firstName'),
-      sorter: (a: { firstName: string; }, b: { firstName: any; }) => a.firstName.localeCompare(b.firstName),
+      sorter: (a: { firstName: string; }, b: { firstName: string; }) => a.firstName.localeCompare(b.firstName),
     },
     {
       title: 'Last Name',
       dataIndex: 'lastName',
     //   ...getColumnSearchProps('lastName'),
-      sorter: (a: { lastName: string; }, b: { lastName: any; }) => a.lastName.localeCompare(b.lastName),
+      sorter: (a: { lastName: string; }, b: { lastName: string; }) => a.lastName.localeCompare(b.lastName),
     },
     {
       title: 'Email',
       dataIndex: 'email',
     //   ...getColumnSearchProps('email'),
-      sorter: (a: { email: string; }, b: { email: any; }) => a.email.localeCompare(b.email),
+      sorter: (a: { email: string; }, b: { email: string; }) => a.email.localeCompare(b.email),
     },
     {
       title: 'Phone',
       dataIndex: 'phone',
     //   ...getColumnSearchProps('phone'),
-      sorter: (a: { phone: string; }, b: { phone: any; }) => a.phone.localeCompare(b.phone),
+      sorter: (a: { phone: string; }, b: { phone: string; }) => a.phone.localeCompare(b.phone),
     },
   ];
+ const data= [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "1234567890"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "phone": "9876543210"
+    },
+    {
+      "firstName": "Michael",
+      "lastName": "Johnson",
+      "email": "michael.johnson@example.com",
+      "phone": "4567890123"
+    },
+    {
+      "firstName": "Emily",
+      "lastName": "Williams",
+      "email": "emily.williams@example.com",
+      "phone": "7890123456"
+    },
+    {
+      "firstName": "David",
+      "lastName": "Brown",
+      "email": "david.brown@example.com",
+      "phone": "2345678901"
+    },
+    {
+      "firstName": "Olivia",
+      "lastName": "Taylor",
+      "email": "olivia.taylor@example.com",
+      "phone": "9012345678"
+    },
+    {
+      "firstName": "James",
+      "lastName": "Anderson",
+      "email": "james.anderson@example.com",
+      "phone": "5678901234"
+    },
+    {
+      "firstName": "Sophia",
+      "lastName": "Clark",
+      "email": "sophia.clark@example.com",
+      "phone": "3456789012"
+    },
+    {
+      "firstName": "Daniel",
+      "lastName": "Lewis",
+      "email": "daniel.lewis@example.com",
+      "phone": "8901234567"
+    },
+    {
+      "firstName": "Ava",
+      "lastName": "Walker",
+      "email": "ava.walker@example.com",
+      "phone": "6789012345"
+    },
+    {
+      "firstName": "William",
+      "lastName": "Hall",
+      "email": "william.hall@example.com",
+      "phone": "0123456789"
+    },
+    {
+      "firstName": "Mia",
+      "lastName": "Young",
+      "email": "mia.young@example.com",
+      "phone": "4567890123"
+    },
+    {
+      "firstName": "Benjamin",
+      "lastName": "Lee",
+      "email": "benjamin.lee@example.com",
+      "phone": "7890123456"
+    },
+    {
+      "firstName": "Evelyn",
+      "lastName": "Harris",
+      "email": "evelyn.harris@example.com",
+      "phone": "2345678901"
+    },
+    {
+      "firstName": "Alexander",
+      "lastName": "King",
+      "email": "alexander.king@example.com",
+      "phone": "9012345678"
+    },
+    {
+      "firstName": "Chloe",
+      "lastName": "Scott",
+      "email": "chloe.scott@example.com",
+      "phone": "5678901234"
+    },
+    {
+      "firstName": "Daniel",
+      "lastName": "Wright",
+      "email": "daniel.wright@example.com",
+      "phone": "3456789012"
+    },
+    {
+      "firstName": "Harper",
+      "lastName": "Martin",
+      "email": "harper.martin@example.com",
+      "phone": "8901234567"
+    },
+    {
+      "firstName": "Joseph",
+      "lastName": "Adams",
+      "email": "joseph.adams@example.com",
+      "phone": "6789012345"
+    },
+    {
+      "firstName": "Mila",
+      "lastName": "Thomas",
+      "email": "mila.thomas@example.com",
+      "phone": "0123456789"
+    }
+  ]
+  
 
   return (
     <div>
       <h1>Customer List</h1>
-      <Table columns={columns} dataSource={customers} />
+      <Table columns={columns} dataSource={data.reverse()} />
     </div>
   );
 };
