@@ -57,7 +57,9 @@ export class Logout extends Component {
                 case LogoutActions.LogoutCallback:
                     return (<div>Processing logout callback</div>);
                 case LogoutActions.LoggedOut:
+                    window.location.href=window.location.origin
                     return (<div>{message}</div>);
+
                 default:
                     throw new Error(`Invalid action '${action}'`);
             }
