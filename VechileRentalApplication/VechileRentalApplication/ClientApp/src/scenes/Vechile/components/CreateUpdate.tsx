@@ -36,7 +36,6 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
       reader.readAsDataURL(file);
     });
   };
-  console.log(vehicle)
 
   return (
     <Modal
@@ -63,13 +62,13 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
         name="form_in_modal"
         initialValues={{ ...vehicle }}
       >
-        <Form.Item name="name" label="Name">
+        <Form.Item name="name" label="Name" rules={[{required:true,message:"Please input vehicle name"}]}>
           <Input />
         </Form.Item>
-        <Form.Item name="detail" label="Detail">
+        <Form.Item name="detail" label="Detail" rules={[{required:true,message:"Please input vehicle detail"}]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name="vehicleType" label="Vehicle Type">
+        <Form.Item name="vehicleType" label="Vehicle Type" rules={[{required:true,message:"Please select vehicle type"}]}>
           <Select placeholder="Select a type">
             {vehicleTypeOptions.map(option => (
               <Select.Option key={option} value={option}>
@@ -78,7 +77,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="brand" label="Brand">
+        <Form.Item name="brand" label="Brand" rules={[{required:true,message:"Please select vehicle breand"}]}>
           <Select placeholder="Select a brand">
             {brandOptions.map(option => (
               <Select.Option key={option} value={option}>
@@ -87,10 +86,10 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="isFree" label="Is Free" valuePropName="checked">
+        <Form.Item name="isFree" label="Is Free" valuePropName="checked" >
           <Checkbox />
         </Form.Item>
-        <Form.Item name="imageData" label="Image">
+        <Form.Item name="imageData" label="Image" rules={[{required:true,message:"Please upload a image"}]}>
           <Upload
             beforeUpload={fileToDataUrl}
             listType="picture"
