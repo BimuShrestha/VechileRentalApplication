@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using VechileRentalApplication.Data;
 using VechileRentalApplication.Models;
 
 namespace VechileRentalApplication.Controllers
@@ -10,20 +11,26 @@ namespace VechileRentalApplication.Controllers
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        private List<Reservation> reservations; // In-memory storage, replace with a database context
-
+        private readonly ApplicationDbContext _context;
+        public ReservationController(ApplicationDbContext vmsDbContext)
+        {
+            _context = vmsDbContext;
+        }
         // GET api/reservations
         [HttpGet]
+        [Route("api/reservations")]
         public IActionResult GetReservations()
         {
+            var reservations = _context.Reservations.ToList();
             return Ok(reservations);
         }
 
         // GET api/reservations/{id}
-        [HttpGet("{id:int}")]
+        [HttpGet]
+        [Route("api/reservation")]
         public IActionResult GetReservation(int id)
         {
-            var reservation = reservations.FirstOrDefault(r => r.Id == id);
+            var reservation = _context.Reservations.FirstOrDefault(r => r.Id == id);
             if (reservation == null)
                 return NotFound();
 
@@ -32,28 +39,24 @@ namespace VechileRentalApplication.Controllers
 
         // POST api/reservations
         [HttpPost]
+        [Route("api/reservation/create")]
         public IActionResult CreateReservation(Reservation reservation)
         {
             // Validate the input
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var newId = reservations.Count + 1;
-            reservation.Id = newId;
-
-            reservations.Add(reservation);
-
-            return CreatedAtAction(nameof(GetReservation), new { id = newId }, reservation);
+            _context.Reservations.Add(reservation);
+            _context.SaveChanges();
+            return Ok();
         }
 
         // PUT api/reservations/{id}
-        [HttpPut("{id:int}")]
-        public IActionResult UpdateReservation(int id, Reservation updatedReservation)
+        [HttpPut]
+        [Route("api/reservation/update")]
+        public IActionResult UpdateReservation(Reservation updatedReservation)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var reservation = reservations.FirstOrDefault(r => r.Id == id);
+            var reservation = _context.Reservations.FirstOrDefault(r => r.Id == updatedReservation.Id);
             if (reservation == null)
                 return NotFound();
 
@@ -64,21 +67,23 @@ namespace VechileRentalApplication.Controllers
             reservation.IsDriverRequired = updatedReservation.IsDriverRequired;
             reservation.DriverId = updatedReservation.DriverId;
             reservation.ReservationStatusId = updatedReservation.ReservationStatusId;
-
-            return NoContent();
+            _context.Reservations.Update(reservation);
+            _context.SaveChanges();
+            return Ok();
         }
 
         // DELETE api/reservations/{id}
-        [HttpDelete("{id:int}")]
+        [HttpDelete]
+        [Route("api/reservation/delete")]
         public IActionResult DeleteReservation(int id)
         {
-            var reservation = reservations.FirstOrDefault(r => r.Id == id);
+            var reservation = _context.Reservations.FirstOrDefault(r => r.Id == id);
             if (reservation == null)
                 return NotFound();
 
-            reservations.Remove(reservation);
-
-            return NoContent();
+            _context.Reservations.Remove(reservation);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }
