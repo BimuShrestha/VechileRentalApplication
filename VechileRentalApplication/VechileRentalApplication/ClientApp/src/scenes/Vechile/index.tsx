@@ -26,7 +26,7 @@ const brandOptions = ['Toyota', 'Ford', 'BMW'];
 
 
 const VehiclePage: React.FC = () => {
-  const [{data,loading},makeRequest]=useAxios("/api/getvechiles");
+  const [{data,loading},makeRequest]=useAxios("/api/vehicles");
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
   const [{ loading:updateLoading  }, updatevehicle] = useAxios(
     {
