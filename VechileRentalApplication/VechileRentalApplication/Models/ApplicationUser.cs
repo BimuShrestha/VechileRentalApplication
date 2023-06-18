@@ -8,5 +8,7 @@ namespace VechileRentalApplication.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public int? UserTypeId { get; set; }
+        public UserType UserType { get; set; }
     }
 }

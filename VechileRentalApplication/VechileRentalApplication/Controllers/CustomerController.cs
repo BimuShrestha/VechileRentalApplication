@@ -82,5 +82,20 @@ namespace VechileRentalApplication.Controllers
             _context.SaveChanges();
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("api/user/me")]
+        public ActionResult GetMyDetail(string email)
+        {
+            var user = _context.Users.FirstOrDefault(c => c.Email==email);
+            if (user == null)
+                return NotFound();
+            //if (customer.UserTypeId==1)
+            //{
+            //    var customer = _context.Customers.FirstOrDefault(c => c. == user.Id);
+            //}
+
+            return Ok(user);
+        }
     }
 }

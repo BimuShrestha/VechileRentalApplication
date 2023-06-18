@@ -7,9 +7,15 @@ import { Spin } from "antd";
 import AdminDashboard from "../scenes/AdminDashboard";
 import LandingPage from "../scenes/LandingPage";
 import StyledSpin from "./StyledSpin";
+import useAxios from "../lib/axios/useAxios";
+import CustomerDashboard from "../scenes/CustomerDashboard";
+import DriverDashboard from "../scenes/DriverDashboard";
 
 const Main=()=>{
     const[isAuthenticated,setIsAuthenticated]=useState(false);
+    const[{data,loading:userLoading},getMyDetail]=useAxios({url:`api/user/me`},{
+        isReady:false
+    })
     const[loading,setLoading]=useState(true);
     const[user,setUser]=useState({} as any)
     useEffect(()=>{
@@ -18,28 +24,31 @@ const Main=()=>{
             console.log(isAuthenticatedValue,userValue)
             setIsAuthenticated(isAuthenticatedValue)
             setUser(userValue);
-            setTimeout(()=>{
-                setLoading(false)
-
-            },2000)
+            if(isAuthenticatedValue){
+                getMyDetail({params:{email:userValue.name}})
+            }
+            setLoading(false);
         })()
     },[])
     const registerPath = `${ApplicationPaths.Register}`;
     const loginPath = `${ApplicationPaths.Login}`;
     const profilePath = `${ApplicationPaths.Profile}`;
     const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
-    if(loading){
+    if(loading || userLoading){
         return (<StyledSpin/>)
     }
       return (<>
-      {isAuthenticated ? <Fragment>
-            {/* <NavItem>
-                <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {user?.userName}</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
-            </NavItem> */}
-            <AdminDashboard data={user}/>
+      {data && isAuthenticated ? <Fragment>
+           
+            {
+                data.userTypeId===1 && <CustomerDashboard data={user}/>
+            }
+             {
+                data.userTypeId===2 && <DriverDashboard/>
+            }
+             {
+                data.userTypeId===3 && <AdminDashboard data={user}/>
+            }
         </Fragment>:<Fragment>
             {/* <NavItem>
                 <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
