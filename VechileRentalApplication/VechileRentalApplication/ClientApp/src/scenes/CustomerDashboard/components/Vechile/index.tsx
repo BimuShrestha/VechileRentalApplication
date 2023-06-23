@@ -8,7 +8,7 @@ import axios from 'axios';
 import { RcFile } from 'antd/es/upload/interface';
 import VehicleModal from './components/CreateUpdate';
 import VehicleList from './components/VehicleList';
-import useAxios from '../../lib/axios/useAxios';
+import useAxios from '../../../../lib/axios/useAxios';
 
 export interface Vehicle {
   id: number;
@@ -61,11 +61,11 @@ const VehiclePage: React.FC = () => {
   const [{ loading:updateLoading  }, updatevehicle] = useAxios(
     {
       method: editingVehicle!==null ? "PUT" : "POST",
-      url: data === "" ? "api/CreateNotes" : "api/UpdateNotes",
+      url: data === "" ? "api/vehicles/Create" : "api/vehicles/Update",
     },
     {
       isReady: false,
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         makeRequest({});
       },
       onError: (err: any) => {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using VechileRentalApplication.Data;
 using VechileRentalApplication.Models;
 
@@ -22,8 +23,44 @@ namespace VechileRentalApplication.Controllers
         [Route("api/vehicles")]
         public IActionResult GetVehicles()
         {
-            var vehicles = _context.Vehicles.ToList();
+            var vehicles = _context.Vehicles.Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                details = x.Details,
+                brand = x.BrandType.Name,
+                brandTypeId = x.BrandTypeId,
+                fuelType = x.FuelType.Name,
+                fuelTypeId = x.FuelTypeId,
+                vehicleType = x.VehicleType.Name,
+                vehicleTypeId = x.VehicleTypeId,
+                imageData = x.Attachment
+            }).OrderByDescending(x => x.id).ToList();
             return Ok(vehicles);
+        }
+
+        [HttpGet]
+        [Route("api/VehicleTypes")]
+        public IActionResult GetVehicleTypes()
+        {
+            var vehicleTypes = _context.VehicleTypes.ToList();
+            return Ok(vehicleTypes);
+        }
+
+        [HttpGet]
+        [Route("api/BrandTypes")]
+        public IActionResult GetBrandTypes()
+        {
+            var brandTypes = _context.BrandTypes.ToList();
+            return Ok(brandTypes);
+        }
+
+        [HttpGet]
+        [Route("api/FuelTypes")]
+        public IActionResult GetFuelTypes()
+        {
+            var fuelTypes = _context.FuelTypes.ToList();
+            return Ok(fuelTypes);
         }
 
         //Implementation of Linear Search
@@ -92,7 +129,7 @@ namespace VechileRentalApplication.Controllers
         // POST api/vehicles
         [HttpPost]
         [Route("api/vehicles/Create")]
-        public IActionResult CreateVehicle(Vehicle vehicle)
+        public IActionResult CreateVehicle([FromForm] Vehicle vehicle)
         {
             _context.Vehicles.Add(vehicle);
             _context.SaveChanges();
@@ -102,7 +139,7 @@ namespace VechileRentalApplication.Controllers
         // PUT api/vehicles/{id}
         [HttpPut]
         [Route("api/vehicles/Update")]
-        public IActionResult UpdateVehicle(Vehicle updatedVehicle)
+        public IActionResult UpdateVehicle([FromForm] Vehicle updatedVehicle)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -114,6 +151,7 @@ namespace VechileRentalApplication.Controllers
             vehicle.Name = updatedVehicle.Name;
             vehicle.Details = updatedVehicle.Details;
             vehicle.VehicleTypeId = updatedVehicle.VehicleTypeId;
+            vehicle.BrandTypeId = updatedVehicle.BrandTypeId;
             vehicle.Attachment = updatedVehicle.Attachment;
             vehicle.FuelTypeId = updatedVehicle.FuelTypeId;
             _context.Vehicles.Update(vehicle);
@@ -124,7 +162,7 @@ namespace VechileRentalApplication.Controllers
         // DELETE api/vehicles/{id}
         [HttpDelete]
         [Route("api/vehicles/Delete")]
-        public IActionResult DeleteVehicle(int id)
+        public IActionResult DeleteVehicle([FromQuery] int id)
         {
             var vehicle = _context.Vehicles.FirstOrDefault(v => v.Id == id);
             if (vehicle == null)

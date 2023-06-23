@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Table, Checkbox, List, Modal, Row, Col, Upload, Select } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import {
-  UploadOutlined,SearchOutlined
+  UploadOutlined, SearchOutlined
 } from '@ant-design/icons';
 import axios from 'axios';
 import { RcFile } from 'antd/es/upload/interface';
@@ -13,55 +13,27 @@ import useAxios from '../../lib/axios/useAxios';
 export interface Vehicle {
   id: number;
   name: string;
-  detail: string;
+  details: string;
   vehicleType: string;
   brand: string;
   isFree: boolean;
+  fuelType?: string;
   imageData: string; // This will store the URL of the image
 }
-// Replace these with your actual options
-const vehicleTypeOptions = ['Car', 'Truck', 'Motorcycle'];
-const brandOptions = ['Toyota', 'Ford', 'BMW'];
 
 
 
 const VehiclePage: React.FC = () => {
-    const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([
-      {
-        id: 1,
-        name: 'Vehicle 1',
-        detail: 'This is a detail of Vehicle 1',
-        vehicleType: 'Car',
-        brand: 'Toyota',
-        isFree: true,
-        imageData: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      },
-      {
-        id: 2,
-        name: 'Vehicle 2',
-        detail: 'This is a detail of Vehicle 2',
-        vehicleType: 'Truck',
-        brand: 'Ford',
-        isFree: false,
-        imageData: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      },
-      {
-        id: 3,
-        name: 'Vehicle 3',
-        detail: 'This is a detail of Vehicle 3',
-        vehicleType: 'Motorcycle',
-        brand: 'BMW',
-        isFree: true,
-        imageData: 'https://images.unsplash.com/photo-1517672651691-24622a91b550?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80',
-      },
-    ]);
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([]);
   const [searchText, setSearchText] = useState<string>('');
-  const [{data,loading},makeRequest]=useAxios("/api/vehicles");
-  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
-  const [{ loading:updateLoading  }, updatevehicle] = useAxios(
+  const [selectedId, setSelectedId] = useState<any>();
+  const [{ data: vehicles, loading }, makeRequest] = useAxios("/api/vehicles");
+  // console.log("DAta", data);
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null | any>(null);
+  const [{ loading: updateLoading }, updatevehicle] = useAxios(
     {
-      method: editingVehicle!==null ? "PUT" : "POST",
-      url: data === "" ? "api/CreateNotes" : "api/UpdateNotes",
+      method: Boolean(editingVehicle) ? "PUT" : "POST",
+      url: Boolean(editingVehicle) ? "api/vehicles/Update" : "api/vehicles/Create",
     },
     {
       isReady: false,
@@ -73,35 +45,27 @@ const VehiclePage: React.FC = () => {
       },
     }
   );
-  const [vehicles, setVehicles] = useState<Vehicle[]>([
+
+  const [{ loading: deleteLoading }, deletevehicle] = useAxios(
     {
-      id: 1,
-      brand: 'Vehicle 1',
-      detail: 'This is a detail of Vehicle 1',
-      vehicleType: 'Car',
-      name: 'Toyota',
-      isFree: true,
-      imageData: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+      method: "DELETE",
+      url: "api/vehicles/Delete"
     },
     {
-      id: 2,
-      brand: 'Vehicle 2',
-      detail: 'This is a detail of Vehicle 2',
-      vehicleType: 'Truck',
-      name: 'Ford',
-      isFree: false,
-      imageData: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: 3,
-      brand: 'Vehicle 3',
-      detail: 'This is a detail of Vehicle 3',
-      vehicleType: 'Motorcycle',
-      name: 'BMW',
-      isFree: true,
-      imageData: 'https://images.unsplash.com/photo-1517672651691-24622a91b550?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80',
-    },
-  ]);
+      isReady: false,
+      onSuccess: (data) => {
+        makeRequest({});
+      },
+      onError: (err: any) => {
+        console.log(err);
+      },
+    }
+  );
+
+  useEffect(() => {
+    setFilteredVehicles(vehicles)
+  }, [loading]);
+
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -113,75 +77,121 @@ const VehiclePage: React.FC = () => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-     let base64= reader.result;
-      let postData = 
-      {
-        "id": 1,
-        "name": values.name,
-        "details": values.detail,
-        "vehicleTypeId": 1,
-        "Attachment": base64,
-      }
-      
-  
-      updatevehicle({ data: postData });
+      let base64: any = reader.result;
+      let formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("details", values.details);
+      formData.append("vehicleTypeId", values.vehicleType);
+      formData.append("brandTypeId", values.brand);
+      formData.append("fuelTypeId", values.fuelType);
+      formData.append("Attachment", base64);
+
+
+      updatevehicle({ data: formData });
       // handle creating a new vehicle
       setIsModalVisible(false);
     };
 
     reader.readAsDataURL(file);
-   
+
   };
 
   const handleUpdate = (values: any) => {
     debugger;
+    var test = editingVehicle;
     console.log('Received values of form: ', values);
-    let postData = {};
+    const file = values?.imageData?.file?.originFileObj;
+    let formData = new FormData();
+    if (file) {
+      const reader = new FileReader();
+      let base64: any = reader.result;
+      reader.onloadend = () => {
 
-    updatevehicle({ data: postData });
-    // handle updating an existing vehicle
+        formData.append("Attachment", base64);
+      }
+
+    }
+    else {
+      formData.append("Attachment", values.imageData);
+    }
+    formData.append("id", selectedId);
+    formData.append("name", values.name);
+    formData.append("details", values.details);
+    if (isNaN(values.vehicleType)) {
+      formData.append("vehicleTypeId", editingVehicle.vehicleTypeId);
+    }
+    else {
+      formData.append("vehicleTypeId", values.vehicleType);
+    }
+    if (isNaN(values.brand)) {
+      formData.append("brandTypeId", editingVehicle.brandTypeId);
+    }
+    else {
+      formData.append("brandTypeId", values.brand);
+    }
+    if (isNaN(values.fuelType)) {
+      formData.append("fuelTypeId", editingVehicle.fuelTypeId);
+    }
+    else {
+      formData.append("fuelTypeId", values.fuelType);
+    }
+    // formData.append("brandTypeId", values.brand);
+    // formData.append("fuelTypeId", values.fuelType);
+
+
+    updatevehicle({ data: formData });
+    // handle creating a new vehicle
     setIsModalVisible(false);
   };
 
-  const editVehicle = (vehicle: Vehicle) => {
+
+  const editVehicle = (vehicle: Vehicle, id: any) => {
+    debugger;
+    setSelectedId(id);
     setEditingVehicle(vehicle);
     setIsModalVisible(true);
   };
 
-  useEffect(() => {
-    fetchVehicles();
-  }, []);
+  const deleteVehicle = (id: any) => {
+    debugger;
+    deletevehicle({ params: id });
+  }
 
-  const fetchVehicles = async () => {
-    // Replace this with your API endpoint
-    const response = await axios.get('/vehicles');
-    setVehicles(response.data);
-  };
+  // useEffect(() => {
+  //   fetchVehicles();
+  // }, []);
 
-  const columns: ColumnsType<Vehicle> = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Detail', dataIndex: 'detail', key: 'detail' },
-    { title: 'Vehicle Type', dataIndex: 'vehicleType', key: 'vehicleType' },
-    { title: 'Brand', dataIndex: 'brand', key: 'brand' },
-    { title: 'Is Free', dataIndex: 'isFree', key: 'isFree' },
-    {
-      title: 'Action',
-      dataIndex: '',
-      key: 'x',
-      render: (_: any, record: Vehicle) => (
-        <a onClick={() => editVehicle(record)}>Edit</a>
-      ),
-    },
-  ];
+  // const fetchVehicles = async () => {
+  //   // Replace this with your API endpoint
+  //   const response = await axios.get('/vehicles');
+  //   setVehicles(response.data);
+  // };
+
+  // const columns: ColumnsType<Vehicle> = [
+  //   { title: 'Name', dataIndex: 'name', key: 'name' },
+  //   { title: 'Detail', dataIndex: 'detail', key: 'detail' },
+  //   { title: 'Vehicle Type', dataIndex: 'vehicleType', key: 'vehicleType' },
+  //   { title: 'Brand', dataIndex: 'brand', key: 'brand' },
+  //   { title: 'Is Free', dataIndex: 'isFree', key: 'isFree' },
+  //   {
+  //     title: 'Action',
+  //     dataIndex: '',
+  //     key: 'x',
+  //     render: (_: any, record: Vehicle) => (
+  //       <a onClick={() => editVehicle(record)}>Edit</a>
+  //     ),
+  //   },
+  // ];
 
 
   const handleSearch = (value: string) => {
     const filteredData = vehicles.filter(
-      (vehicle) =>
+      (vehicle: any) =>
         vehicle.name.toLowerCase().includes(value.toLowerCase()) ||
-        vehicle.detail.toLowerCase().includes(value.toLowerCase()) ||
+        vehicle.details.toLowerCase().includes(value.toLowerCase()) ||
         vehicle.brand.toLowerCase().includes(value.toLowerCase())
     );
+    debugger;
     setFilteredVehicles(filteredData);
     setSearchText(value);
   };
@@ -192,23 +202,24 @@ const VehiclePage: React.FC = () => {
       <Row justify="space-between">
         <Col>
           <Button type="primary"
+            disabled={loading}
             onClick={() => {
               setEditingVehicle(null);
               setIsModalVisible(true);
             }}>
             Add Vehicle
           </Button>
-         
+
 
         </Col>
         <Col>
-         <Input
-          placeholder="Search by name or detail"
-          value={searchText}
-          onChange={(e) => handleSearch(e.target.value)}
-          prefix={<SearchOutlined />}
-          allowClear
-        />
+          <Input
+            placeholder="Search by name or detail"
+            value={searchText}
+            onChange={(e) => handleSearch(e.target.value)}
+            prefix={<SearchOutlined />}
+            allowClear
+          />
         </Col>
       </Row>
       <VehicleModal
@@ -223,7 +234,8 @@ const VehiclePage: React.FC = () => {
       <VehicleList
         vehicles={filteredVehicles}
         onEditVehicle={editVehicle}
-        loading={loading}
+        onDeleteVehicle={deleteVehicle}
+        loading={loading || updateLoading || deleteLoading} 
       />
 
     </div>

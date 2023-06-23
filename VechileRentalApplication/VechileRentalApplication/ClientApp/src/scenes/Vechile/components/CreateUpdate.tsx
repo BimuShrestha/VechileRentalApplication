@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { Modal, Form, Input, Select, Checkbox, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/lib/upload';
-
-const vehicleTypeOptions = ['Car', 'Truck', 'Motorcycle'];
-const brandOptions = ['Toyota', 'Ford', 'BMW'];
+import useAxios from '../../../lib/axios/useAxios';
 
 interface VehicleModalProps {
     visible: boolean;
@@ -23,6 +21,10 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
     editing,
 }) => {
   const [form] = Form.useForm();
+  const [{data: vehicleTypes}]=useAxios("/api/VehicleTypes");
+  const [{data: brandTypes}]=useAxios("/api/BrandTypes");
+  const [{data: fuelTypes}]=useAxios("/api/FuelTypes");
+
 
   const fileToDataUrl = (file: RcFile): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -36,6 +38,10 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
       reader.readAsDataURL(file);
     });
   };
+
+  const handleFormSubmit = (values: any) => {
+    debugger;
+  }
 
   return (
     <Modal
@@ -61,33 +67,40 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
         layout="vertical"
         name="form_in_modal"
         initialValues={{ ...vehicle }}
+        onFinish={handleFormSubmit}
       >
         <Form.Item name="name" label="Name" rules={[{required:true,message:"Please input vehicle name"}]}>
           <Input />
         </Form.Item>
-        <Form.Item name="detail" label="Detail" rules={[{required:true,message:"Please input vehicle detail"}]}>
+        <Form.Item name="details" label="Detail" rules={[{required:true,message:"Please input vehicle detail"}]}>
           <Input.TextArea />
-        </Form.Item>
-        <Form.Item name="vehicleType" label="Vehicle Type" rules={[{required:true,message:"Please select vehicle type"}]}>
-          <Select placeholder="Select a type">
-            {vehicleTypeOptions.map(option => (
-              <Select.Option key={option} value={option}>
-                {option}
-              </Select.Option>
-            ))}
-          </Select>
         </Form.Item>
         <Form.Item name="brand" label="Brand" rules={[{required:true,message:"Please select vehicle breand"}]}>
           <Select placeholder="Select a brand">
-            {brandOptions.map(option => (
-              <Select.Option key={option} value={option}>
-                {option}
+            {brandTypes && brandTypes.map((option: any) => (
+              <Select.Option key={option.id} value={option.id}>
+                {option.name}
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="isFree" label="Is Free" valuePropName="checked" >
-          <Checkbox />
+        <Form.Item name="vehicleType" label="Vehicle Type" rules={[{required:true,message:"Please select vehicle type"}]}>
+          <Select placeholder="Select a type">
+            {vehicleTypes && vehicleTypes.map((option: any) => (
+              <Select.Option key={option.id} value={option.id}>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="fuelType" label="Fuel Type" rules={[{required:true,message:"Please select fuel type"}]}>
+          <Select placeholder="Select a type">
+            {fuelTypes && fuelTypes.map((option: any) => (
+              <Select.Option key={option.id} value={option.id}>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item name="imageData" label="Image" rules={[{required:true,message:"Please upload a image"}]}>
           <Upload
