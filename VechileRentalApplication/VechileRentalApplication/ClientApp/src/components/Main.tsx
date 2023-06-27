@@ -26,6 +26,7 @@ const Main=()=>{
             setUser(userValue);
             if(isAuthenticatedValue){
                 getMyDetail({params:{email:userValue.name}})
+                console.log("Current User", data);
             }
             setLoading(false);
         })()
@@ -41,13 +42,13 @@ const Main=()=>{
       {data && isAuthenticated ? <Fragment>
            
             {
-                data.userTypeId===1 && <CustomerDashboard data={user}/>
+                data.userTypeId===1 && <CustomerDashboard data={data}/>
             }
              {
                 data.userTypeId===2 && <DriverDashboard/>
             }
              {
-                data.userTypeId===3 && <AdminDashboard data={user}/>
+                data.userTypeId===3 && <AdminDashboard data={data}/>
             }
         </Fragment>:<Fragment>
             {/* <NavItem>

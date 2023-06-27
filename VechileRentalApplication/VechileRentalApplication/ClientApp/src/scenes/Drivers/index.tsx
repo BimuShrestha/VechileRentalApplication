@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { Driver } from '../Reservation';
 
-const DriverPage: React.FC = () => {
+const DriverPage = (props: any) => {
   const [drivers, setDrivers] = useState<Driver[]>([
     // Initial driver data or data fetched from an API
   ]);

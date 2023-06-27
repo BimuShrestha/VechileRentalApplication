@@ -25,6 +25,7 @@ interface User{
   data:any;
 }
 const AdminDashboard: React.FC<User> = ({data}) => {
+  console.log("This is data", data);
   const [collapsed, setCollapsed] = useState(false);
   const [key,setKey]=useState("1")
   const {
@@ -47,9 +48,6 @@ const AdminDashboard: React.FC<User> = ({data}) => {
             />
             VRS
         </div>
-        
-      
-      
         <Menu
           theme="dark"
           mode="inline"
@@ -108,8 +106,8 @@ const AdminDashboard: React.FC<User> = ({data}) => {
             background: colorBgContainer,
           }}
         >
-          {key==="1"&&<Vechiles/>}
-         {key==="2"&& <ReservationPage/>}
+          {key==="1"&&<Vechiles data = {data && data}/>}
+         {key==="2"&& <ReservationPage data = {data && data}/>}
         </Content>
       </Layout>
     </Layout>

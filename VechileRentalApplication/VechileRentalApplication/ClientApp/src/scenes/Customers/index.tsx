@@ -3,7 +3,7 @@ import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Customer } from '../Reservation';
 
-const CustomerPage: React.FC = () => {
+const CustomerPage = (props: any) => {
   const [customers, setCustomers] = useState
   <Customer[]>([
     // Initial customer data or data fetched from an API

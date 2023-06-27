@@ -7,7 +7,6 @@ using VechileRentalApplication.Models;
 
 namespace VechileRentalApplication.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
@@ -40,7 +39,7 @@ namespace VechileRentalApplication.Controllers
         // POST api/reservations
         [HttpPost]
         [Route("api/reservation/create")]
-        public IActionResult CreateReservation(Reservation reservation)
+        public IActionResult CreateReservation([FromForm] Reservation reservation)
         {
             // Validate the input
             _context.Reservations.Add(reservation);

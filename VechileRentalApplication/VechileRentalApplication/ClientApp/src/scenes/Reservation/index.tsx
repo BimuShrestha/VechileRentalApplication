@@ -36,7 +36,7 @@ export interface Driver {
     phone: string;
   }
 
-const ReservationPage = () => {
+const ReservationPage = (props: any) => {
     
    
       

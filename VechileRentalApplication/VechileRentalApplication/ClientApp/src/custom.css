@@ -26,3 +26,6 @@ code {
   justify-content: start;
   gap: 10px;
 }
+.booknow-btn {
+  display: none;
+}

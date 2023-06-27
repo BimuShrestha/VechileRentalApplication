@@ -30,7 +30,7 @@ namespace VechileRentalApplication.Controllers
         // GET api/drivers/{id}
         [HttpGet]
         [Route("api/driver")]
-        public IActionResult GetDriver(int id)
+        public IActionResult GetDriver(string id)
         {
             var driver = _context.Customers.FirstOrDefault(d => d.Id == id);
             if (driver == null)

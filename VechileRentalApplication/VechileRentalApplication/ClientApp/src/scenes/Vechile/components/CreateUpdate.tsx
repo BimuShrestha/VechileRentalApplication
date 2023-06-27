@@ -59,7 +59,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
         })
         .catch(info => console.log('Validate Failed:', info));
     }}
-    destroyOnClose={true}
+    destroyOnClose
 
     >
       <Form

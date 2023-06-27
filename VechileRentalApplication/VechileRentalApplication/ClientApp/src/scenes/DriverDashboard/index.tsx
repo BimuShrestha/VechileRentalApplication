@@ -14,7 +14,7 @@ import CustomerPage from '../Customers';
 
 const { Header, Sider, Content } = Layout;
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard = ({data}: any) => {
   const [collapsed, setCollapsed] = useState(false);
   const [key,setKey]=useState("1")
   const {
@@ -40,11 +40,6 @@ const AdminDashboard: React.FC = () => {
               key: '2',
               icon: <VideoCameraOutlined />,
               label: 'Reservations',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'Drivers',
             },
             {
                 key: '4',
@@ -75,7 +70,7 @@ const AdminDashboard: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-         {key==="2"&& <ReservationPage/>}
+         {key==="2"&& <ReservationPage data = {data && data}/>}
         </Content>
       </Layout>
     </Layout>

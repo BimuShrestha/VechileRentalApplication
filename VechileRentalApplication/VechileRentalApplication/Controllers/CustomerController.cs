@@ -29,7 +29,7 @@ namespace VechileRentalApplication.Controllers
         // GET api/customers/{id}
         [HttpGet]
         [Route("api/customer")]
-        public IActionResult GetCustomer(int id)
+        public IActionResult GetCustomer(string id)
         {
             var customer = _context.Customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)
@@ -72,7 +72,7 @@ namespace VechileRentalApplication.Controllers
         // DELETE api/customers/{id}
         [HttpDelete]
         [Route("api/customer/delete")]
-        public IActionResult DeleteCustomer(int id)
+        public IActionResult DeleteCustomer(string id)
         {
             var customer = _context.Customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)

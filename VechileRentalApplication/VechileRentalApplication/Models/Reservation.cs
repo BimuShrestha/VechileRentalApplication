@@ -6,7 +6,7 @@ namespace VechileRentalApplication.Models
     {
         public int Id { get; set; }
         public int VehicleId { get; set; }
-        public int CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public DateTime ReservationStartDate { get; set; }
         public DateTime ReservationEndDate { get; set; }
         public bool IsDriverRequired { get; set; }
