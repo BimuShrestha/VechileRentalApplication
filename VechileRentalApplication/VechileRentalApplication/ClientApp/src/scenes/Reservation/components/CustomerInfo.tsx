@@ -3,7 +3,7 @@ import { Modal, Descriptions } from 'antd';
 
 interface CustomerInfoModalProps {
   visible: boolean;
-  customer: Customer;
+  customer: any;
   onClose: () => void;
 }
 
@@ -15,7 +15,7 @@ const CustomerInfoModal: React.FC<CustomerInfoModalProps> = ({
   return (
     <Modal
       visible={visible}
-      title={`${customer.firstName} ${customer.lastName}`}
+      title={customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email}
       onCancel={onClose}
       footer={null}
     >
@@ -23,7 +23,7 @@ const CustomerInfoModal: React.FC<CustomerInfoModalProps> = ({
         <Descriptions.Item label="First Name">{customer.firstName}</Descriptions.Item>
         <Descriptions.Item label="Last Name">{customer.lastName}</Descriptions.Item>
         <Descriptions.Item label="Email">{customer.email}</Descriptions.Item>
-        <Descriptions.Item label="Phone">{customer.phone}</Descriptions.Item>
+        <Descriptions.Item label="Phone">{customer.phoneNumber}</Descriptions.Item>
       </Descriptions>
     </Modal>
   );

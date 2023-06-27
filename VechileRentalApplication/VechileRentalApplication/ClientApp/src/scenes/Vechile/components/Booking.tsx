@@ -10,11 +10,13 @@ interface BookingModalProps {
     onCancel: () => void;
     vehicle: any;
     editing: boolean;
+    loading: boolean;
 }
 export const BookingModal: React.FC<BookingModalProps> = ({
     visible,
     onVehicleBooking,
     onCancel,
+    loading,
     vehicle,
     editing,
 }) => {
@@ -30,6 +32,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             okText='Confirm'
             cancelText="Cancel"
             onCancel={() => (form.resetFields(), onCancel())}
+            okButtonProps={{loading: loading}}
             onOk={() => {
                 form
                     .validateFields()

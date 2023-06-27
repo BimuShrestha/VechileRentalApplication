@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Checkbox, List, Modal, Row, Col, Upload, Select } from 'antd';
+import { Form, Input, Button, Table, Checkbox, List, Modal, Row, Col, Upload, Select, notification } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import {
   UploadOutlined, SearchOutlined
@@ -74,6 +74,12 @@ const VehiclePage = (props: any) => {
     {
       isReady: false,
       onSuccess: (data) => {
+        notification.success({
+          message: 'Success',
+          description:
+            'Vehicle booked successfully!',
+        });
+        setBookingModalVisible(false);
         makeRequest({});
       },
       onError: (err: any) => {
@@ -117,16 +123,17 @@ const VehiclePage = (props: any) => {
   };
 
   const onVehicleBooking = (values: any) => {
+    debugger;
     const reservationStartDate = moment(values?.reservationStartDate).format('YYYY-MM-DD');
     const reservationEndDate = moment(values?.reservationEndDate).format('YYYY-MM-DD');
     let formData = new FormData();
     formData.append("vehicleId", selectedId);
     formData.append("customerId", data.id);
-    formData.append("reservationStartDate", reservationStartDate);
-    formData.append("reservationEndDate", reservationEndDate);
+    formData.append("reservationStartDate", values?.reservationStartDate);
+    formData.append("reservationEndDate", values?.reservationEndDate);
     formData.append("isDriverRequired", values?.isDriverRequired ? values?.isDriverRequired : false);
     formData.append("reservationStatusId", '1');
-    bookVehicle({data: formData});
+    bookVehicle({ data: formData });
   }
 
   const handleUpdate = (values: any) => {
@@ -245,6 +252,7 @@ const VehiclePage = (props: any) => {
         visible={bookingModalVisible}
         onVehicleBooking={onVehicleBooking}
         onCancel={() => (setBookingModalVisible(false))}
+        loading={bookingLoading}
         vehicle={editingVehicle || {}}
         editing={Boolean(editingVehicle)}
       />

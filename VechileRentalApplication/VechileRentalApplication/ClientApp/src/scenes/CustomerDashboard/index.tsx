@@ -62,7 +62,7 @@ const AdminDashboard: React.FC<User> = ({data}) => {
             {
               key: '2',
               icon: <RobotOutlined />,
-              label: 'Reservations',
+              label: 'My Reservations',
             },
           ]}
         />
@@ -107,7 +107,7 @@ const AdminDashboard: React.FC<User> = ({data}) => {
           }}
         >
           {key==="1"&&<Vechiles data = {data && data}/>}
-         {key==="2"&& <ReservationPage data = {data && data}/>}
+         {key==="2"&& <ReservationPage isCustomer = {true} data = {data && data}/>}
         </Content>
       </Layout>
     </Layout>

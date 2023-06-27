@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VechileRentalApplication.Data;
@@ -18,9 +19,26 @@ namespace VechileRentalApplication.Controllers
         // GET api/reservations
         [HttpGet]
         [Route("api/reservations")]
-        public IActionResult GetReservations()
+        public IActionResult GetReservations([FromQuery] string customerId)
+        
         {
-            var reservations = _context.Reservations.ToList();
+            var reservations = _context.Reservations.Select(x => new
+            {
+                Id = x.Id,
+                VehicleId = x.VehicleId,
+                Vehicle = x.Vehicle,
+                ReservationStatusId = x.ReservationStatusId,
+                ReservationStatus = x.ReservationStatus.Name,
+                IsDriverRequired = x.IsDriverRequired,
+                Driver = x.Driver,
+                CustomerId = x.CustomerId,
+                Customer = _context.Users.Where(u => x.CustomerId.ToString() == u.Id).FirstOrDefault(),
+                ReservationStartDate = x.ReservationStartDate,
+                ReservationEndDate = x.ReservationEndDate
+            }).ToList();
+            if(customerId != null) { 
+                reservations = reservations.Where(r => r.CustomerId == Guid.Parse(customerId)).ToList();
+            }
             return Ok(reservations);
         }
 
