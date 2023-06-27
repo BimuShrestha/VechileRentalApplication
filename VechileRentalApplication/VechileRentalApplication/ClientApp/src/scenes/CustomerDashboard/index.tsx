@@ -86,12 +86,13 @@ const AdminDashboard: React.FC<User> = ({data}) => {
           <Col span={16}>
          <Row justify="end" style={{gap:"10px"}}>
           <Col>
-          Welcome {data.name}
+                 Welcome {data.firstName?data.firstName:""+" "+data.lastName?data.lastName:""}
+
           </Col>
           <Col>
            
           <Button type='primary'>
-                <a href={logoutPath.pathname}>Logout</a>
+                <a href="/authentication/profile">Profile</a>
           </Button>
           </Col>
          </Row>

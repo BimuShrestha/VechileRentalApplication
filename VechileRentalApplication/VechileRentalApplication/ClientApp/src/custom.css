@@ -29,3 +29,11 @@ code {
 .booknow-btn {
   display: none;
 }
+.ant-card-meta-description{
+  text-overflow: ellipsis;
+    height: 46px;
+}
+
+.custom-carousel.carousel.slide{
+  margin-bottom: 10px;
+}

@@ -1,18 +1,17 @@
 // VehicleCard.js
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card } from 'antd';
 
+const { Meta } = Card;
 const VehicleCard = ({ vehicle }) => {
     return (
-        <Card style={{ width: '18rem' }} className="mb-4">
-            <Card.Img variant="top" src={vehicle.imageUrl} />
-            <Card.Body>
-                <Card.Title>{vehicle.name}</Card.Title>
-                <Card.Text>
-                    {vehicle.description}
-                </Card.Text>
-            </Card.Body>
-        </Card>
+        <Card
+    hoverable
+    style={{ width: 240 }}
+    cover={<img alt="example" src={vehicle.imageData} />}
+  >
+    <Meta title={vehicle.name} description={vehicle.details} />
+  </Card>
     );
 }
 

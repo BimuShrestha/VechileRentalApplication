@@ -7,6 +7,7 @@ import { ApplicationPaths } from '../../../components/api-authorization/ApiAutho
 import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import CarLogo from "./assets/car.png"
+import useAxios from '../../../lib/axios/useAxios';
 const vehicleData = Array(40).fill(0).map((_, i) => ({ // Hard-coded data
     name: `Vehicle ${i+1}`,
     description: 'Vehicle description...',
@@ -23,9 +24,11 @@ const HomePage = () => {
 
     const vehicleData = Array(40)?.fill(0).map((_, i) => ({ // Hard-coded data
         name: `Vehicle ${i+1}`,
-        description: 'Vehicle description...',
-        imageUrl: 'https://via.placeholder.com/150'
+        details: 'Vehicle description...',
+        imageData: 'https://via.placeholder.com/150'
     }));
+
+    var[{data,loading}]=useAxios({url:"api/vehicles"})
 
     const handleSearch = (event: any) => {
         // Handle search logic here
@@ -88,11 +91,20 @@ const HomePage = () => {
 
             <Container>
                 <Row xs={1} md={2} lg={4}>
+                    {data?<>
+                        {data.map((vehicle:any, index:any) => (
+                        <Col key={index}>
+                            <VehicleCard vehicle={vehicle} />
+                        </Col>
+                    ))}
+                    </>:
+                    <>
                     {vehicleData.map((vehicle, index) => (
                         <Col key={index}>
                             <VehicleCard vehicle={vehicle} />
                         </Col>
                     ))}
+                    </>}
                 </Row>
             </Container>
 

@@ -89,7 +89,7 @@ namespace VechileRentalApplication.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,UserTypeId=Input.UserType=="User"?1:2 };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,UserTypeId=Input.UserType=="User"?1:2,FirstName=Input.FirstName,LastName=Input.LastName,EmailConfirmed=true };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
