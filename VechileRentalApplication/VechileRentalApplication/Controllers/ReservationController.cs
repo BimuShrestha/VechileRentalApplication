@@ -68,7 +68,7 @@ namespace VechileRentalApplication.Controllers
         // PUT api/reservations/{id}
         [HttpPut]
         [Route("api/reservation/update")]
-        public IActionResult UpdateReservation(Reservation updatedReservation)
+        public IActionResult UpdateReservation([FromForm] Reservation updatedReservation)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

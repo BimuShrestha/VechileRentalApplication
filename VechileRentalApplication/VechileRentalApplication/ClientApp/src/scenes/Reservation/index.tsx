@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Space, Select } from 'antd';
+import { Table, Tag, Space, Select, notification } from 'antd';
 import { Vehicle } from '../Vechile';
 import VehicleInfoModal from './components/VehicleInfo';
 import DriverInfoModal from './components/DriverInfo';
@@ -52,6 +52,39 @@ const ReservationPage = (props: any) => {
     // ... initial state with dummy data or fetched from API
   ]);
 
+  const [{ loading: updateLoading }, updateReservation] = useAxios(
+    {
+      method: "PUT",
+      url: "api/reservation/update",
+    },
+    {
+      isReady: false,
+      onSuccess: (data) => {
+        notification.success({
+          message: 'Success',
+          description:
+            'Reservation updated successfully!',
+        });
+        makeRequest({});
+      },
+      onError: (err: any) => {
+        console.log(err);
+      },
+    }
+  );
+
+  const handleStatusChange = (value: any, record: any) => {
+    let formData = new FormData();
+    formData.append("id", record.id);
+    formData.append("vehicleId", record.vehicleId);
+    formData.append("customerId", record.customerId);
+    formData.append("reservationStartDate", record?.reservationStartDate);
+    formData.append("reservationEndDate", record?.reservationEndDate);
+    formData.append("isDriverRequired", record?.isDriverRequired ? record?.isDriverRequired : false);
+    formData.append("reservationStatusId", value);
+    updateReservation({ data: formData });
+  }
+
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
   // ...
@@ -92,22 +125,28 @@ const ReservationPage = (props: any) => {
     {
       title: 'Reservation Status',
       dataIndex: 'reservationStatusId',
-      render: (text: any, record: Reservation) => (
-        <Select
-          defaultValue={record.reservationStatusId}
-          // onChange={(value: string) =>
-          //   setReservations(reservations.map(res =>
-          //     res.id === record.id ? { ...res, reservationStatusId: value } : res
-          //   ))
-          // }
-        >
-          {statusOptions.map(option => (
-            <Select.Option key={option.id} value={option.id}>
-              {option.name}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
+      render: (text: any, record: any) => 
+        { if (data && data.userTypeId == 3)
+          return (<Select
+            defaultValue={record.reservationStatusId}
+            onChange={(e: any)=>handleStatusChange(e, record)}
+            // onChange={(value: string) =>
+            //   setReservations(reservations.map(res =>
+            //     res.id === record.id ? { ...res, reservationStatusId: value } : res
+            //   ))
+            // }
+          >
+            {statusOptions.map(option => (
+              <Select.Option key={option.id} value={option.id}>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select>)
+          else {
+            return record.reservationStatus
+          }
+        
+        },
       filters: statusOptions.map(status => ({ text: status, value: status })),
       onFilter: (value: any, record: Reservation) => record.reservationStatusId === value,
     },

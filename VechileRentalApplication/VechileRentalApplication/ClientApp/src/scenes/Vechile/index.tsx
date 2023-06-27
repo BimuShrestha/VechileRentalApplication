@@ -124,8 +124,6 @@ const VehiclePage = (props: any) => {
 
   const onVehicleBooking = (values: any) => {
     debugger;
-    const reservationStartDate = moment(values?.reservationStartDate).format('YYYY-MM-DD');
-    const reservationEndDate = moment(values?.reservationEndDate).format('YYYY-MM-DD');
     let formData = new FormData();
     formData.append("vehicleId", selectedId);
     formData.append("customerId", data.id);
